@@ -1,5 +1,5 @@
 import React from 'react';
-import DadJokes from "./DadJokes"
+import DadJokes from "./DadJokes";
 import "./App.css";
 
 function App() {

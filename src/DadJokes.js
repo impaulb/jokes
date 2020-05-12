@@ -8,7 +8,7 @@ class DadJokes extends React.Component{
 
     // Default number of jokes to generate
     static defaultProps = {
-        n: 10
+        n: 1
     }
 
     constructor(props){
@@ -18,6 +18,7 @@ class DadJokes extends React.Component{
             jokes: JSON.parse(window.localStorage.getItem("jokes") || "[]"),
             isLoaded: true
         }
+        this.seenJokes = new Set(this.state.jokes.map(joke => joke.text));
         this._changeVote = this._changeVote.bind(this);
         this._genJokes = this._genJokes.bind(this);
         this._renderJokes = this._renderJokes.bind(this);
@@ -33,24 +34,32 @@ class DadJokes extends React.Component{
 
     async _genJokes(){
         this.setState({isLoaded: false});
-        let newJokes = this.state.jokes;
+        let newJokes = [];
 
         // Request random jokes from ICanHazDadJoke API
-        for(var i = 0; i < this.props.n; i++){
+        while(newJokes.length < this.props.n){
             let data = await axios.get("https://icanhazdadjoke.com/slack");
-            newJokes.push(
-                {
-                    text: data.data.attachments[0].text,
-                    upvotes: 0, 
-                    uuid: uuid()
-                }
-            );
+            let joke = data.data.attachments[0].text;
+            if(!this.seenJokes.has(joke)){
+                
+                // Add new joke to new array of jokes
+                newJokes.push(
+                    {
+                        text: joke,
+                        upvotes: 0, 
+                        uuid: uuid()
+                    }
+                );
+
+                // Add new joke to current list of jokes
+                this.seenJokes.add(joke);
+            }
         }
 
         // Updates joke state with new jokes
         this.setState(st => (
             {
-                jokes: newJokes,
+                jokes: st.jokes.concat(newJokes),
                 isLoaded: true
             }
         )); 

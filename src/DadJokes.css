@@ -1,7 +1,6 @@
 .DadJokes{
     font-family: 'Jost', sans-serif;
     color: #f3e9d2;
-    margin-top: 50px;
 }
 
 .DadJokes-Footer{
@@ -55,4 +54,9 @@
     -webkit-box-shadow: 0px 7px 12px -10px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 7px 12px -10px rgba(0,0,0,0.75);
     box-shadow: 0px 7px 12px -10px rgba(0,0,0,0.75);
+}
+
+.link-txt, .link-txt:hover{
+    text-decoration: inherit;
+    color: inherit;
 }
